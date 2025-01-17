@@ -118,5 +118,6 @@ namespace Coal
         {
             throw UnknownInstructionException();
         }
+        m_registers[15].setValue(m_registers[15].getValue() + 1);
     }
 }
