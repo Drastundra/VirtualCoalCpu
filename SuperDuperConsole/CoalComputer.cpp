@@ -123,7 +123,7 @@ namespace Coal
         unsigned char m_valueOrRegisterIndex;
     };
 
-    void CPU::process(const Instruction& instruction)
+    void CPU::process(const InstructionLine& instruction)
     {
         std::vector<std::string> tokenList = splitIntoTokens(instruction);
         const std::string& instructionType = tokenList[0];

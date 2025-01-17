@@ -26,7 +26,7 @@ int main(int argc, char** argv)
 
     while (!instructionList.empty())
     {
-        Coal::Instruction instruction = instructionList.front();
+        Coal::InstructionLine instruction = instructionList.front();
         instructionList.erase(instructionList.begin());
         
         try

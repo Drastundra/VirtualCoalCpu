@@ -24,8 +24,8 @@ namespace Coal
         unsigned char m_value = 0;
     };
 
-    using Instruction = std::string;
-    using InstructionList = std::vector<Instruction>;
+    using InstructionLine = std::string;
+    using InstructionLineList = std::vector<InstructionLine>;
 
 #define DECLARE_NEW_EXCEPTION_CLASS(classname) \
 class classname : public std::runtime_error\
@@ -52,7 +52,7 @@ classname::classname()\
     public:
         Register& getRegister(int idx);
         const Register& getRegister(int idx) const;
-        void process(const Instruction&);
+        void process(const InstructionLine&);
 
     private:
         Register m_registers[16];
@@ -68,6 +68,6 @@ classname::classname()\
     
     private:
         CPU m_cpu;
-        InstructionList m_instructions;
+        InstructionLineList m_instructions;
     };
 }
