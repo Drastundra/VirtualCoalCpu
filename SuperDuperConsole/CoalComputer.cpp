@@ -88,14 +88,31 @@ namespace Coal
             const std::string& op1 = tokenList[1];
             const std::string& op2 = tokenList[2];
 
-            unsigned char val = std::stoi(op1);
-            if (op2[0] != 'r')
+            try
+            {
+                unsigned char val = 0;
+                if (op1[0] == 'r')
+                {
+                    std::string newStr = std::string(&op1[1], op1.size() - 1);
+                    unsigned char regIdx = std::stoi(newStr);
+                    val = m_registers[regIdx].getValue();
+                }
+                else
+                {
+                    val = std::stoi(op1);
+                }
+
+                if (op2[0] != 'r')
+                    throw InvalidOperandException();
+
+                std::string newStr = std::string(&op2[1], op2.size() - 1);
+                unsigned char regIdx = std::stoi(newStr);
+                m_registers[regIdx].setValue(val);
+            }
+            catch (std::invalid_argument&)
+            {
                 throw InvalidOperandException();
-
-            std::string newStr = std::string(&op2[1], op2.size() - 1);
-            unsigned char regIdx = std::stoi(newStr);
-
-            m_registers[regIdx].setValue(val);
+            }
         }
         else
         {
