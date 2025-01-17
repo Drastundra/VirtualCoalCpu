@@ -78,5 +78,28 @@ namespace Coal
     void CPU::process(const Instruction& instruction)
     {
         std::vector<std::string> tokenList = splitIntoTokens(instruction);
+        const std::string& instructionType = tokenList[0];
+
+        if (instructionType == "MOV")
+        {
+            if (tokenList.size() != 3)
+                throw InvalidNumberOfOperandInstruction();
+
+            const std::string& op1 = tokenList[1];
+            const std::string& op2 = tokenList[2];
+
+            unsigned char val = std::stoi(op1);
+            if (op2[0] != 'r')
+                throw InvalidOperandException();
+
+            std::string newStr = std::string(&op2[1], op2.size() - 1);
+            unsigned char regIdx = std::stoi(newStr);
+
+            m_registers[regIdx].setValue(val);
+        }
+        else
+        {
+            throw UnknownInstructionException();
+        }
     }
 }
