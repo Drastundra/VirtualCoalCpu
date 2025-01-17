@@ -9,8 +9,14 @@ namespace Coal
 {
     class Register
     {
+        friend class CPU;
+        friend class Debuger;
+
     public:
         const unsigned char& getValue() const { return m_value; }
+
+    protected:
+        void setValue(unsigned char newValue) { m_value = newValue; }
 
     private:
         unsigned char m_value = 0;
