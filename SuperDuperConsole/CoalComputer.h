@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 
 class ConsoleFramebuffer;
 
@@ -15,7 +16,7 @@ namespace Coal
         unsigned char m_value = 0;
     };
 
-    class Instruction;
+    using Instruction = std::string;
     using InstructionList = std::vector<Instruction>;
 
     class CPU

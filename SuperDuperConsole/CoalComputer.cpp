@@ -32,4 +32,9 @@ namespace Coal
     }
 
     const Register& CPU::getRegister(int idx)const { return m_registers[idx]; }
+
+    void CPU::process(const Instruction& instruction)
+    {
+        //  A vous de jouer.
+    }
 }
