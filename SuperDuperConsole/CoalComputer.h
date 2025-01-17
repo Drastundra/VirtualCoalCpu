@@ -43,6 +43,9 @@ classname::classname()\
     DECLARE_NEW_EXCEPTION_CLASS(UnknownInstructionException);
     DECLARE_NEW_EXCEPTION_CLASS(InvalidNumberOfOperandInstruction);
     DECLARE_NEW_EXCEPTION_CLASS(InvalidOperandException);
+    DECLARE_NEW_EXCEPTION_CLASS(DivisionByZeroException);
+
+
 
     class CPU
     {

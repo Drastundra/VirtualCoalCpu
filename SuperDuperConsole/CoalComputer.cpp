@@ -75,6 +75,7 @@ namespace Coal
     IMPLEMENT_NEW_EXCEPTION_CLASS(UnknownInstructionException, "Trying to process an unknown instruction.")
     IMPLEMENT_NEW_EXCEPTION_CLASS(InvalidNumberOfOperandInstruction, "Invalid number of operand.")
     IMPLEMENT_NEW_EXCEPTION_CLASS(InvalidOperandException, "Operand is invalid.")
+    IMPLEMENT_NEW_EXCEPTION_CLASS(DivisionByZeroException, "Division by zero.")
 
     class OperandAccessor
     {
@@ -145,6 +146,39 @@ namespace Coal
             OperandAccessor src2(tokenList[2]);
             OperandAccessor dest(tokenList[3]);
             dest.affect(*this, src1.evaluate(*this) + src2.evaluate(*this));
+        }
+        else if (instructionType == "SUB")
+        {
+            if (tokenList.size() != 4)
+                throw InvalidNumberOfOperandInstruction();
+
+            OperandAccessor src1(tokenList[1]);
+            OperandAccessor src2(tokenList[2]);
+            OperandAccessor dest(tokenList[3]);
+            dest.affect(*this, src1.evaluate(*this) - src2.evaluate(*this));
+        }
+        else if (instructionType == "MUL")
+        {
+            if (tokenList.size() != 4)
+                throw InvalidNumberOfOperandInstruction();
+
+            OperandAccessor src1(tokenList[1]);
+            OperandAccessor src2(tokenList[2]);
+            OperandAccessor dest(tokenList[3]);
+            dest.affect(*this, src1.evaluate(*this) * src2.evaluate(*this));
+        }
+        else if (instructionType == "DIV")
+        {
+            if (tokenList.size() != 4)
+                throw InvalidNumberOfOperandInstruction();
+
+            OperandAccessor src1(tokenList[1]);
+            OperandAccessor src2(tokenList[2]);
+            OperandAccessor dest(tokenList[3]);
+            if (src2.evaluate(*this) == 0)
+                throw DivisionByZeroException();
+
+            dest.affect(*this, src1.evaluate(*this) / src2.evaluate(*this));
         }
         else
         {
