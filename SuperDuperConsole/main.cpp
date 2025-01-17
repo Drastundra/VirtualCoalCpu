@@ -1,6 +1,8 @@
 #include "ConsoleFramebuffer.h"
 #include "CoalComputer.h"
 
+#include <iostream>
+
 int main(int argc, char** argv)
 {
     ConsoleFramebuffer cfb;
@@ -19,7 +21,15 @@ int main(int argc, char** argv)
         Coal::Instruction instruction = instructionList.front();
         instructionList.erase(instructionList.begin());
         
-        cpu.process(instruction);
+        try
+        {
+            cpu.process(instruction);
+        }
+        catch (std::runtime_error& e)
+        {
+            std::cerr << e.what();
+            return 0;
+        }
 
         Coal::showCPU(cfb, cpu);
         cfb.show();
