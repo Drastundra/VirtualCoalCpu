@@ -14,7 +14,7 @@ int main(int argc, char** argv)
 
     Coal::showCPU(cfb, cpu);
 
-    while (true)
+    while (!instructionList.empty())
     {
         Coal::Instruction instruction = instructionList.front();
         instructionList.erase(instructionList.begin());
