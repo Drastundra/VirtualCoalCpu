@@ -136,6 +136,9 @@ namespace Coal
             OperandAccessor dest(tokenList[2]);
             dest.affect(*this, src.evaluate(*this));
         }
+        else if (instructionType == "ADD")
+        {
+        }
         else
         {
             throw UnknownInstructionException();
