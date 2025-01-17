@@ -75,6 +75,10 @@ namespace Coal
 
     const Register& CPU::getRegister(int idx)const { return m_registers[idx]; }
 
+    IMPLEMENT_NEW_EXCEPTION_CLASS(UnknownInstructionException, "Trying to process an unknown instruction.")
+    IMPLEMENT_NEW_EXCEPTION_CLASS(InvalidNumberOfOperandInstruction, "Invalid number of operand.")
+    IMPLEMENT_NEW_EXCEPTION_CLASS(InvalidOperandException, "Operand is invalid.")
+
     void CPU::process(const Instruction& instruction)
     {
         std::vector<std::string> tokenList = splitIntoTokens(instruction);
