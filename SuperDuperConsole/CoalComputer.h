@@ -12,6 +12,7 @@ namespace Coal
     {
         friend class CPU;
         friend class Debuger;
+        friend class OperandAccessor;
 
     public:
         const unsigned char& getValue() const { return m_value; }

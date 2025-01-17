@@ -76,6 +76,52 @@ namespace Coal
     IMPLEMENT_NEW_EXCEPTION_CLASS(InvalidNumberOfOperandInstruction, "Invalid number of operand.")
     IMPLEMENT_NEW_EXCEPTION_CLASS(InvalidOperandException, "Operand is invalid.")
 
+    class OperandAccessor
+    {
+    public:
+        OperandAccessor(const Token& token)
+        {
+            try
+            {
+                if (token[0] == 'r')
+                {
+                    std::string newStr = std::string(&token[1], token.size() - 1);
+                    m_valueOrRegisterIndex = std::stoi(newStr);
+                    m_isRegister = true;
+                }
+                else
+                {
+                    m_valueOrRegisterIndex = std::stoi(token);
+                    m_isRegister = false;
+                }
+            }
+            catch (std::invalid_argument&)
+            {
+                throw InvalidOperandException();
+            }
+        }
+
+        unsigned char evaluate(const CPU& cpu)
+        {
+            if (!m_isRegister)
+                return m_valueOrRegisterIndex;
+
+            return cpu.getRegister(m_valueOrRegisterIndex).getValue();
+        }
+
+        void affect(CPU& cpu, unsigned char newValue)
+        {
+            if (!m_isRegister)
+                throw InvalidOperandException();
+
+            cpu.getRegister(m_valueOrRegisterIndex).setValue(newValue);
+        }
+
+    private:
+        bool m_isRegister;
+        unsigned char m_valueOrRegisterIndex;
+    };
+
     void CPU::process(const Instruction& instruction)
     {
         std::vector<std::string> tokenList = splitIntoTokens(instruction);
@@ -86,34 +132,9 @@ namespace Coal
             if (tokenList.size() != 3)
                 throw InvalidNumberOfOperandInstruction();
 
-            const std::string& op1 = tokenList[1];
-            const std::string& op2 = tokenList[2];
-
-            try
-            {
-                unsigned char val = 0;
-                if (op1[0] == 'r')
-                {
-                    std::string newStr = std::string(&op1[1], op1.size() - 1);
-                    unsigned char regIdx = std::stoi(newStr);
-                    val = m_registers[regIdx].getValue();
-                }
-                else
-                {
-                    val = std::stoi(op1);
-                }
-
-                if (op2[0] != 'r')
-                    throw InvalidOperandException();
-
-                std::string newStr = std::string(&op2[1], op2.size() - 1);
-                unsigned char regIdx = std::stoi(newStr);
-                m_registers[regIdx].setValue(val);
-            }
-            catch (std::invalid_argument&)
-            {
-                throw InvalidOperandException();
-            }
+            OperandAccessor src(tokenList[1]);
+            OperandAccessor dest(tokenList[2]);
+            dest.affect(*this, src.evaluate(*this));
         }
         else
         {
