@@ -66,8 +66,8 @@ namespace Coal
         for (int row = 0; row < 8; ++row)
         {
             std::stringstream ss;
+            ss << static_cast<unsigned int>(cpu.getRegister(row + 8).getValue());
 
-            ss << static_cast<unsigned int>(cpu.getRegister(row).getValue());
 
             cfb.printString(row + 1, 6, ss.str(), Green, White);
         }
