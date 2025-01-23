@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Instruction.h"
+
 #include <vector>
 #include <string>
-#include <stdexcept>
 
 class ConsoleFramebuffer;
 
@@ -25,27 +26,7 @@ namespace Coal
     };
 
     using InstructionLine = std::string;
-    using InstructionLineList = std::vector<InstructionLine>;
-
-#define DECLARE_NEW_EXCEPTION_CLASS(classname) \
-class classname : public std::runtime_error\
-{\
-public:\
-    classname();\
-};
-
-#define IMPLEMENT_NEW_EXCEPTION_CLASS(classname, message) \
-classname::classname()\
-    : std::runtime_error(message)\
-{\
-}
-
-    DECLARE_NEW_EXCEPTION_CLASS(UnknownInstructionException);
-    DECLARE_NEW_EXCEPTION_CLASS(InvalidNumberOfOperandInstruction);
-    DECLARE_NEW_EXCEPTION_CLASS(InvalidOperandException);
-    DECLARE_NEW_EXCEPTION_CLASS(DivisionByZeroException);
-
-
+    using InstructionList = std::vector<InstructionLine>;
 
     class CPU
     {
@@ -68,6 +49,6 @@ classname::classname()\
     
     private:
         CPU m_cpu;
-        InstructionLineList m_instructions;
+        InstructionList m_instructions;
     };
 }

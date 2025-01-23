@@ -9,7 +9,7 @@ int main(int argc, char** argv)
     
     Coal::CPU cpu;
 
-    Coal::InstructionLineList instructionList = {
+    Coal::InstructionList instructionList = {
         "MOV 42 r7"
       , "MOV 12 r0"
       , "ADD r0 r7 r14"
@@ -20,6 +20,7 @@ int main(int argc, char** argv)
       , "MUL r7 r0 r12"
       , "DIV r7 r0 r11"
       , "DIV r7 0  r11 "
+      , "TOTO"
     };
 
     Coal::showCPU(cfb, cpu);

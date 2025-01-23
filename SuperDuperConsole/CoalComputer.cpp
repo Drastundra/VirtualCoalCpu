@@ -1,14 +1,14 @@
 #include "CoalComputer.h"
 
 #include "ConsoleFramebuffer.h"
+#include "Exception.h"
 
 #include <sstream>
 
 namespace
 {
-    using Token = std::string;
-    using TokenList = std::vector<Token>;
-
+    using Token = Coal::Token;
+    using TokenList = Coal::TokenList;
     TokenList splitStringBySpace(const std::string& str)
     {
         std::string workingStr = str;
@@ -72,56 +72,7 @@ namespace Coal
     const Register& CPU::getRegister(int idx)const { return m_registers[idx]; }
     Register& CPU::getRegister(int idx) { return m_registers[idx]; }
 
-    IMPLEMENT_NEW_EXCEPTION_CLASS(UnknownInstructionException, "Trying to process an unknown instruction.")
-    IMPLEMENT_NEW_EXCEPTION_CLASS(InvalidNumberOfOperandInstruction, "Invalid number of operand.")
-    IMPLEMENT_NEW_EXCEPTION_CLASS(InvalidOperandException, "Operand is invalid.")
-    IMPLEMENT_NEW_EXCEPTION_CLASS(DivisionByZeroException, "Division by zero.")
 
-    class OperandAccessor
-    {
-    public:
-        OperandAccessor(const Token& token)
-        {
-            try
-            {
-                if (token[0] == 'r')
-                {
-                    std::string newStr = std::string(&token[1], token.size() - 1);
-                    m_valueOrRegisterIndex = std::stoi(newStr);
-                    m_isRegister = true;
-                }
-                else
-                {
-                    m_valueOrRegisterIndex = std::stoi(token);
-                    m_isRegister = false;
-                }
-            }
-            catch (std::invalid_argument&)
-            {
-                throw InvalidOperandException();
-            }
-        }
-
-        unsigned char evaluate(const CPU& cpu)
-        {
-            if (!m_isRegister)
-                return m_valueOrRegisterIndex;
-
-            return cpu.getRegister(m_valueOrRegisterIndex).getValue();
-        }
-
-        void affect(CPU& cpu, unsigned char newValue)
-        {
-            if (!m_isRegister)
-                throw InvalidOperandException();
-
-            cpu.getRegister(m_valueOrRegisterIndex).setValue(newValue);
-        }
-
-    private:
-        bool m_isRegister;
-        unsigned char m_valueOrRegisterIndex;
-    };
 
     void CPU::process(const InstructionLine& instruction)
     {
@@ -130,22 +81,13 @@ namespace Coal
 
         if (instructionType == "MOV")
         {
-            if (tokenList.size() != 3)
-                throw InvalidNumberOfOperandInstruction();
-
-            OperandAccessor src(tokenList[1]);
-            OperandAccessor dest(tokenList[2]);
-            dest.affect(*this, src.evaluate(*this));
+            Mov mov(tokenList);
+            mov.apply(*this);   
         }
         else if (instructionType == "ADD")
         {
-            if (tokenList.size() != 4)
-                throw InvalidNumberOfOperandInstruction();
-
-            OperandAccessor src1(tokenList[1]);
-            OperandAccessor src2(tokenList[2]);
-            OperandAccessor dest(tokenList[3]);
-            dest.affect(*this, src1.evaluate(*this) + src2.evaluate(*this));
+            Add add(tokenList);
+            add.apply(*this);
         }
         else if (instructionType == "SUB")
         {

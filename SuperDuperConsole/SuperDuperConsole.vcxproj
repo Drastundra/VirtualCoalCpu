@@ -129,11 +129,18 @@
   <ItemGroup>
     <ClCompile Include="CoalComputer.cpp" />
     <ClCompile Include="ConsoleFramebuffer.cpp" />
+    <ClCompile Include="Exception.cpp" />
+    <ClCompile Include="Instruction.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OperandAccessor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseType.h" />
     <ClInclude Include="CoalComputer.h" />
     <ClInclude Include="ConsoleFramebuffer.h" />
+    <ClInclude Include="Exception.h" />
+    <ClInclude Include="Instruction.h" />
+    <ClInclude Include="OperandAccessor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
