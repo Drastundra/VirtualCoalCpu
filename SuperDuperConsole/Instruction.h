@@ -13,10 +13,15 @@ namespace Coal
 
     class CPU;
 
-    class Instruction
+    class IInstruction
     {
     public:
-        Instruction(const TokenList& tokenList, int nbOperand)
+        virtual ~IInstruction()
+        {
+
+        }
+
+        IInstruction(const TokenList& tokenList, int nbOperand)
         {
             if (tokenList.size() != nbOperand)
                 throw InvalidNumberOfOperandInstruction();
@@ -25,10 +30,10 @@ namespace Coal
         virtual void apply(CPU& cpu) = 0;
     };
 
-    class Mov : public Instruction
+    class Mov : public IInstruction
     {
     public:
-        Mov(const TokenList& tokenList) : Instruction(tokenList, 3), src(tokenList[1]), dest(tokenList[2])
+        Mov(const TokenList& tokenList) : IInstruction(tokenList, 3), src(tokenList[1]), dest(tokenList[2])
         {}
 
         void apply(CPU& cpu) override
@@ -40,10 +45,10 @@ namespace Coal
         OperandAccessor dest;
     };
 
-    class Add : public Instruction
+    class Add : public IInstruction
     {
     public:
-        Add(const TokenList& tokenList) : Instruction(tokenList, 4), src1(tokenList[1]), src2(tokenList[2]), dest(tokenList[3])
+        Add(const TokenList& tokenList) : IInstruction(tokenList, 4), src1(tokenList[1]), src2(tokenList[2]), dest(tokenList[3])
         {
         }
 
